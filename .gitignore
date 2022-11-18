@@ -42,6 +42,7 @@ build/
 nbbuild/
 nbdist/
 .nb-gradle/
+.idea/
 nb-configuration.xml
 *.xml
 .idea/sonarlint/issuestore/2/9/292f6d2ec699c4e7d53199b23ba45a2b74041cc1
