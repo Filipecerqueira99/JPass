@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -135,4 +136,21 @@ class StringUtilTest {
         );
     }
     
+    @ParameterizedTest
+    @CsvSource({
+    	TEXT_HIGHER_80 + "," +  TEXT_HIGHER_80_EXPECTED_RESULT,
+    	TEXT_LESS_THAN_80 + "," + TEXT_LESS_THAN_80_EXPECTED_RESULT,
+    })
+	void testDataFlowStripStringProvidingLengthNotNullText(String input, String expectedValue) {
+    	String strippedText = StringUtils.stripString(input,80);
+		assertEquals(strippedText, expectedValue);
+	}
+    
+    @Test
+	void testDataFlowStripStringProvidingLengthNullText() {
+    	String strippedText = StringUtils.stripString(null,80);
+		assertEquals(strippedText, null);
+	}
+}
+
 }
