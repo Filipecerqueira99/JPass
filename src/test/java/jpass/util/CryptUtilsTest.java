@@ -2,6 +2,9 @@ package jpass.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,8 +27,7 @@ class CryptUtilsTest {
     	String encryptedTextAsString = bytesToHex(encryptedText);
     	assertEquals(expectedSha256Hash, encryptedTextAsString);
 	}
-    
-    @SuppressWarnings("unused")
+
 	private static Stream<Arguments> provideArgumentsForCreateFormatter() {
         return Stream.of(
           Arguments.of((Object)TEXT_TO_ENCRYPT_VALID, (Object)TEXT_TO_ENCRYPT_VALID_EXPECTED),
@@ -34,7 +36,9 @@ class CryptUtilsTest {
         );
     }
     
-    @SuppressWarnings("unused")
+
+
+
 	private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
         for (int i = 0; i < hash.length; i++) {
@@ -45,6 +49,34 @@ class CryptUtilsTest {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+
+
+    @ParameterizedTest
+    @MethodSource("argumentsTestGetSha256HashAssignment8")
+    void testGetSha256HashAssignment8(char[] text) throws Exception {
+        byte[] encryptedText = CryptUtils.getPKCS5Sha256Hash(text);
+        byte[] expected = shaOneThousand(new String(text), 1000);
+        String encryptedTextAsString = bytesToHex(encryptedText);
+        String expectedAsString = bytesToHex(expected);
+        assertEquals(encryptedTextAsString, expectedAsString);
+    }
+
+    private byte[] shaOneThousand(String text, int iteration) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] result = digest.digest(text.getBytes(StandardCharsets.UTF_8));
+        for(int i = 0; i < iteration; i++) {
+            result = digest.digest(result);
+        }
+        return result;
+    }
+
+    private static Stream<Arguments> argumentsTestGetSha256HashAssignment8() {
+        return Stream.of(
+                Arguments.of( new char[] {'v','a','l','i','d'}),
+                Arguments.of(new char[] {})
+        );
     }
 
 }
