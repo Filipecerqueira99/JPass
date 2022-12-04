@@ -7,9 +7,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullSource;
 
 class CryptUtilsTest {
 
@@ -17,8 +19,6 @@ class CryptUtilsTest {
 	private final static String TEXT_TO_ENCRYPT_VALID_EXPECTED = "ec654fac9599f62e79e2706abef23dfb7c07c08185aa86db4d8695f0b718d1b3";
 	private final static char[] TEXT_TO_ENCRYPT_EMPTY = new char[] {};
 	private final static String TEXT_TO_ENCRYPT_EMPTY_EXPECTED = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-	private final static char[] TEXT_TO_ENCRYPT_NULL = null;
-	private final static String TEXT_TO_ENCRYPT_NULL_EXPECTED = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
     @ParameterizedTest
     @MethodSource("provideArgumentsForCreateFormatter")
@@ -31,11 +31,19 @@ class CryptUtilsTest {
 	private static Stream<Arguments> provideArgumentsForCreateFormatter() {
         return Stream.of(
           Arguments.of((Object)TEXT_TO_ENCRYPT_VALID, (Object)TEXT_TO_ENCRYPT_VALID_EXPECTED),
-          Arguments.of((Object)TEXT_TO_ENCRYPT_EMPTY, (Object)TEXT_TO_ENCRYPT_EMPTY_EXPECTED),
-          Arguments.of((Object)TEXT_TO_ENCRYPT_NULL, (Object) TEXT_TO_ENCRYPT_NULL_EXPECTED)
+          Arguments.of((Object)TEXT_TO_ENCRYPT_EMPTY, (Object)TEXT_TO_ENCRYPT_EMPTY_EXPECTED)
         );
     }
     
+    @ParameterizedTest
+    @NullSource
+	void testGetSha256HashNullInput(char[] input) {
+		NullPointerException thrown = Assertions.assertThrows(NullPointerException.class, () -> {
+			CryptUtils.getSha256Hash(input);
+		}, "NullPointerException was expected");
+		
+		Assertions.assertTrue(thrown instanceof NullPointerException);
+	}
 
 
 

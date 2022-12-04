@@ -1,14 +1,10 @@
 package jpass.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,18 +12,18 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class DateUtilsTest {
-	private final static String FORMATTER_VALID_DD_MM_YY = "DD-MM-YY";
+	private final static String FORMATTER_VALID_DD_MM_YY = "dd-MM-yyyy";
 	private final static DateTimeFormatter FORMATTER_VALID_DD_MM_YY_EXPECTED = DateTimeFormatter.ofPattern(FORMATTER_VALID_DD_MM_YY);
 	private final static String FORMATTER_INVALID = "NotAValidFormatter";
 	private final static DateTimeFormatter FORMATTER_INVALID_EXPECTED = DateTimeFormatter.ISO_DATE;
 	private final static String FORMATTER_EMPTY = "";
-	private final static DateTimeFormatter FORMATTER_EMPTY_EXPECTED = DateTimeFormatter.ISO_DATE;
+	private final static DateTimeFormatter FORMATTER_EMPTY_EXPECTED = DateTimeFormatter.ofPattern(FORMATTER_EMPTY);
 	private final static String FORMATTER_NULL = null;
 	private final static DateTimeFormatter FORMATTER_NULL_EXPECTED = DateTimeFormatter.ISO_DATE;
 	
 	private final static String DATE_TO_TEST_FORMATTERS = LocalDateTime.now()
             .truncatedTo(ChronoUnit.SECONDS)
-            .format(DateTimeFormatter.ISO_DATE_TIME);
+            .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
     @ParameterizedTest
     @MethodSource("provideArgumentsForCreateFormatter")
@@ -35,7 +31,14 @@ class DateUtilsTest {
 		System.out.println(inputFormat);
 		System.out.println(expectedFormatter);
     	DateTimeFormatter createdFormatter = DateUtils.createFormatter(inputFormat);
-    	String isoDateFormaterdCreatedFormatter = DateUtils.formatIsoDateTime(DATE_TO_TEST_FORMATTERS,createdFormatter);
+    	String isoDateFormaterdCreatedFormatter="";
+    	try {
+    		isoDateFormaterdCreatedFormatter = DateUtils.formatIsoDateTime(DATE_TO_TEST_FORMATTERS,createdFormatter);
+    	}catch (Exception e) {
+    		System.out.println(e.getMessage());
+    		System.out.println(e);
+    		e.printStackTrace();
+		}
     	String isoDateFormaterdExpectedFormatter = DateUtils.formatIsoDateTime(DATE_TO_TEST_FORMATTERS,expectedFormatter);
     	assertEquals(isoDateFormaterdCreatedFormatter,isoDateFormaterdExpectedFormatter);
 	}
@@ -64,10 +67,10 @@ class DateUtilsTest {
 	}
 	private static Stream<Arguments> provideArgumentsForformatIsoDateTimeOne() {
 		return Stream.of(
-				//1Âºinput: structure, 2Âºinput: date in miliseconds, 3Âºinput: date formated
-				Arguments.of("YYYY/MM/DD", "96423478300", "1973/01/21"),
-				Arguments.of("YYYY/MM/DD", "1287224000", "1970/01/15"),
-				Arguments.of("YYYY/MM/DD", "1234567891234", "2009/02/13")
+				//1ºinput: structure, 2ºinput: date in miliseconds, 3ºinput: date formated
+				Arguments.of("yyyy/MM/dd", "96423478300", "1973/01/21"),
+				Arguments.of("yyyy/MM/dd", "1287224000", "1970/01/15"),
+				Arguments.of("yyyy/MM/dd", "1234567891234", "2009/02/13")
 		);
 	}
 
@@ -81,14 +84,14 @@ class DateUtilsTest {
 		System.out.println(isoDateFormaterdCreatedFormatter);
 		//System.out.println(expectedDate);
 
-		assertEquals(isoDateFormaterdCreatedFormatter, "1969/01/01");
+		assertEquals(isoDateFormaterdCreatedFormatter, "1970/01/01");
 	}
 	private static Stream<Arguments> provideArgumentsForformatIsoDateTimeTwo() {
 		return Stream.of(
-				//1Âºinput: date, 2Âºinput: date in miliseconds
-				Arguments.of("YYYY/MM/DD", "a"),
-				Arguments.of("YYYY/MM/DD", "abc123"),
-				Arguments.of("YYYY/MM/DD", "20/09/02/13")
+				//1ºinput: date, 2ºinput: date in miliseconds
+				Arguments.of("yyyy/MM/dd", "a"),
+				Arguments.of("yyyy/MM/dd", "abc123"),
+				Arguments.of("yyyy/MM/dd", "20/09/02/13")
 		);
 	}
 }
