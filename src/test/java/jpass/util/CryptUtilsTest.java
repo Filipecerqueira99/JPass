@@ -1,13 +1,16 @@
 package jpass.util;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -86,5 +89,22 @@ class CryptUtilsTest {
                 Arguments.of(new char[] {})
         );
     }
+    
+	@Test
+	void testRandomNumberGenerated() {
+		Random randomNumber = CryptUtils.newRandomNumberGenerator();
 
+		assertTrue(randomNumber != null);
+	}
+	
+	@Test
+	void testMessageDigestToStringMessageInitializedAfterExecutionOnWrongInitialState() throws Exception {
+		byte in= 0x0;
+		MessageDigest.getInstance("SHA-256").update(in);
+		CryptUtils.getSha256Hash(TEXT_TO_ENCRYPT_EMPTY);
+		String toString = MessageDigest.getInstance("SHA-256").toString();
+		String expectedToString = "SHA-256 Message Digest from SUN, <initialized>";
+		boolean equalStrings = expectedToString.trim().equalsIgnoreCase(toString.trim());
+    	assertTrue(equalStrings);
+	}
 }
