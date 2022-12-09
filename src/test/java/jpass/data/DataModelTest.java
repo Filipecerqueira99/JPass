@@ -1,4 +1,4 @@
-package jpass.crypt.data;
+package jpass.data;
 
 import jpass.data.DataModel;
 import jpass.xml.bind.Entries;
@@ -6,6 +6,8 @@ import jpass.xml.bind.Entry;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.xml.crypto.Data;
+import java.io.File;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,8 +54,18 @@ public class DataModelTest {
         datamodel.clear();
         Entry entry = new Entry();
         entry.setTitle("title");
+        entry.setPassword("password");
+        entry.setNotes("note");
+        entry.setUrl("url");
+        entry.setUser("user");
+        entry.setCreationDate("date created");
         Entries entries = new Entries();
         entries.getEntry().add(entry);
+
+        byte[] byteExample = "\u00e0".getBytes();
+        datamodel.setFileName("fileName");
+        datamodel.setPassword(byteExample);
+        datamodel.setModified(true);
 
         datamodel.setEntries(entries);
         datamodel.clear();
@@ -63,6 +75,7 @@ public class DataModelTest {
         assertNull(datamodel.getPassword());
         assertEquals(false, datamodel.isModified());
     }
+
 
     @Test
     public void entryByTitleTest() {
