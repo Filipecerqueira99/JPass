@@ -1,3 +1,6 @@
+# This project is based on the [![Gaborbata Jpass](https://travis-ci.org/gaborbata/jpass.svg?branch=master)] all credits goes to the original author. All changes were made for the class Testing, Validation and Verification of Software for the Msc Software Engineering on Faculty of Engineering - University of Porto.
+
+
 <p align="center">
  <img src="https://raw.githubusercontent.com/gaborbata/jpass/master/resources/bannerReadMe.png" width=750 align="center">
 </p>
