@@ -1,3 +1,6 @@
+# TVVS/@FEUP 22_23
+This is a fork from JPASS used to create unit tests and other testing good practices. This was made for Test Verification and Velidation of Software. Really liked how this project turned out so decided to save it here. Big props to my friends who worked with me on this one. 
+
 #### This project is based on the [Gaborbata Jpass](https://github.com/gaborbata/jpass) all credits goes to the original author. 
 #### All changes were made for the class Testing, Validation and Verification of Software for the Msc Software Engineering on Faculty of Engineering - University of Porto.
 
